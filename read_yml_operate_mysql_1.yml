@@ -1,0 +1,26 @@
+common:
+  raven:
+    url: https://d62c03092b5741fb817e6db0:0d5a6bd2e0f5484492e4dfac2ea933a2@sentry.example.net/14
+
+staging:
+  database:
+    host: 0wr4d12p.mysql.rds.aliyuncs.com
+    port: 3306
+    user: 0wr4d12p
+    pass: 0wr4d12p
+    dbname: 0wr4d12p
+  dayu:
+    key: 23592388
+    secret: 23592388
+    tpl_id: 23592388
+prod:
+  database:
+    host: gqk6e2.mysql.rds.aliyuncs.com
+    port: 3306
+    user: gqk6e2
+    pass: gqk6e2
+    dbname: gqk6e2
+  dayu:
+    key: 23592388
+    secret: 23592388
+    tpl_id: 23592388
