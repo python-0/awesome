@@ -1,0 +1,49 @@
+#!/usr/bin/env python
+# coding=utf-8
+
+import os
+import sys
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                    datefmt='%Y%m%d %H:%M:%S',
+                    filename='/var/log/clean.log',
+                    filemode='a')
+
+if len(sys.argv) != 2:
+    sys.exit('Only accept one parameter')
+
+logstash_dir = '/Users/user/sandbox/clean'
+path = os.path.join(logstash_dir, sys.argv[1])
+files = os.listdir(path)
+
+
+def get_host(f):
+    return f.split('_')[0]
+hosts = list(set(map(get_host, files)))
+
+
+def task():
+    """按照日期,删除旧文件
+    把来自同一主机的日志放在一个dict里,key为文件名,value为ctime,
+    求这个列表中的ctime的最大值, 然后删除ctime不是最大ctime对应的那些文件
+    """
+    for host in hosts:
+        files_modtime = {}
+        for f in files:
+            if host in f:
+                file_modtime = int(os.path.getmtime(os.path.join(path, f)))
+                files_modtime[f] = file_modtime
+        latest_file = max(files_modtime.values())
+        for f, modtime in files_modtime.iteritems():
+            if modtime != latest_file:
+                os.remove(os.path.join(path, f))
+                logging.info("deleted {}".format(os.path.join(path, f)))
+
+if __name__ == '__main__':
+    if len(hosts) != len(files):
+        task()
+    else:
+        exit(0)
+
